@@ -47,7 +47,6 @@ export default function VideoPlayer() {
     }
   }, [filter]);
 
-  // Função: Loop contínuo para atualizar o canvas enquanto o vídeo toca
   useEffect(() => {
     let animationId: number;
     const render = () => {
@@ -58,7 +57,12 @@ export default function VideoPlayer() {
     return () => cancelAnimationFrame(animationId);
   }, [drawFrame]);
 
-  
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = volume;
+    }
+  }, [selectedVideo, volume]);
+
   const togglePlay = () => {
     if (videoRef.current) {
       isPlaying ? videoRef.current.pause() : videoRef.current.play();
@@ -66,14 +70,12 @@ export default function VideoPlayer() {
     }
   };
 
-  
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setVolume(val);
     if (videoRef.current) videoRef.current.volume = val;
   };
 
-  // Função: Arrastar a barra de progresso para mudar o tempo
   const handleTimeSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setCurrentTime(val);
