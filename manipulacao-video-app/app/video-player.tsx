@@ -14,7 +14,7 @@ export default function VideoPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [filter, setFilter] = useState<FilterType>('none');
-  const [isScrubbing, setIsScrubbing] = useState(false); 
+  const [isScrubbing, setIsScrubbing] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -58,7 +58,7 @@ export default function VideoPlayer() {
     return () => cancelAnimationFrame(animationId);
   }, [drawFrame]);
 
-  // Função: Alternar entre Play e Pause
+  
   const togglePlay = () => {
     if (videoRef.current) {
       isPlaying ? videoRef.current.pause() : videoRef.current.play();
@@ -66,28 +66,26 @@ export default function VideoPlayer() {
     }
   };
 
-  // Função: Ajustar o volume do vídeo
+  
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setVolume(val);
     if (videoRef.current) videoRef.current.volume = val;
   };
 
-  // Função: Arrastar a barra de progresso (Seekbar) para mudar o tempo
+  // Função: Arrastar a barra de progresso para mudar o tempo
   const handleTimeSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setCurrentTime(val);
     if (videoRef.current) videoRef.current.currentTime = val;
   };
 
-  // Função: Atualizar o tempo atual visualmente, pausando a atualização se estiver arrastando a barra
   const handleTimeUpdate = () => {
     if (videoRef.current && !isScrubbing) {
       setCurrentTime(videoRef.current.currentTime);
     }
   };
 
-  // Função: Trocar de vídeo na playlist
   const changeVideo = (video: VideoData) => {
     setSelectedVideo(video);
     setIsPlaying(false);
@@ -100,7 +98,6 @@ export default function VideoPlayer() {
     }, 100);
   };
 
-  // Função: Formatar segundos brutos para o formato MM:SS
   const formatTime = (time: number) => {
     if (isNaN(time)) return "0:00";
     const m = Math.floor(time / 60);
@@ -111,46 +108,46 @@ export default function VideoPlayer() {
   return (
     <div className="flex w-full max-w-[500px] flex-col items-center rounded-[2rem] border border-white/10 bg-zinc-900/90 p-6 shadow-2xl">
       <h2 className="mb-4 text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600">One Piece Project</h2>
-      
-      <video 
+
+      <video
         key={selectedVideo.url}
-        ref={videoRef} 
-        src={selectedVideo.url} 
-        className="hidden" 
+        ref={videoRef}
+        src={selectedVideo.url}
+        className="hidden"
         preload="metadata"
-        onLoadedMetadata={(e) => setTotalDuration(e.currentTarget.duration)} 
-        onTimeUpdate={handleTimeUpdate} 
+        onLoadedMetadata={(e) => setTotalDuration(e.currentTarget.duration)}
+        onTimeUpdate={handleTimeUpdate}
       />
-      
+
       <canvas ref={canvasRef} width={640} height={360} className="w-full rounded-xl bg-black" />
 
       <div className="w-full mt-4">
-        <input 
-          type="range" 
-          max={totalDuration} 
-          value={currentTime} 
+        <input
+          type="range"
+          max={totalDuration}
+          value={currentTime}
           onChange={handleTimeSeek}
           onMouseDown={() => setIsScrubbing(true)}
           onMouseUp={() => setIsScrubbing(false)}
           onTouchStart={() => setIsScrubbing(true)}
           onTouchEnd={() => setIsScrubbing(false)}
-          className="w-full h-1.5 accent-red-600 cursor-pointer" 
+          className="w-full h-1.5 accent-red-600 cursor-pointer"
         />
         <div className="flex justify-between text-[10px] text-zinc-500 mt-1">{formatTime(currentTime)} / {formatTime(totalDuration)}</div>
       </div>
 
-      <VideoControls 
-        isPlaying={isPlaying} 
-        onTogglePlay={togglePlay} 
+      <VideoControls
+        isPlaying={isPlaying}
+        onTogglePlay={togglePlay}
         onRewind={() => videoRef.current && (videoRef.current.currentTime -= 10)}
         onForward={() => videoRef.current && (videoRef.current.currentTime += 10)}
         onNext={() => {
-            const idx = VIDEO_PLAYLIST.findIndex(v => v.id === selectedVideo.id);
-            changeVideo(VIDEO_PLAYLIST[(idx + 1) % VIDEO_PLAYLIST.length]);
+          const idx = VIDEO_PLAYLIST.findIndex(v => v.id === selectedVideo.id);
+          changeVideo(VIDEO_PLAYLIST[(idx + 1) % VIDEO_PLAYLIST.length]);
         }}
         onPrevious={() => {
-            const idx = VIDEO_PLAYLIST.findIndex(v => v.id === selectedVideo.id);
-            changeVideo(VIDEO_PLAYLIST[(idx - 1 + VIDEO_PLAYLIST.length) % VIDEO_PLAYLIST.length]);
+          const idx = VIDEO_PLAYLIST.findIndex(v => v.id === selectedVideo.id);
+          changeVideo(VIDEO_PLAYLIST[(idx - 1 + VIDEO_PLAYLIST.length) % VIDEO_PLAYLIST.length]);
         }}
         onFilterChange={setFilter}
       />
@@ -181,7 +178,7 @@ export default function VideoPlayer() {
           />
         ))}
       </div>
-      
+
     </div>
   );
 }
