@@ -1,8 +1,5 @@
 # OnePiece-VideoManipulation-NextJS
 
-# Criar o projeto Next.js (use as configurações padrão que sugerimos anteriormente)
-npx create-next-app@latest manipulacao-video-app
-
 # Entrar na pasta do projeto
 cd manipulacao-video-app
 
